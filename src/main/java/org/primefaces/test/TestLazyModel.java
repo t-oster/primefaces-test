@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import org.primefaces.model.FilterMeta;
-import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 
 /**
  *
  * @author Thomas Oster <thomas.oster@upstart-it.de>
  */
-public class TestLazyModel extends LazyDataModel<ExampleData> implements Serializable {
+public class TestLazyModel extends LazyDataModelFixed<ExampleData> implements Serializable {
      
     private final List<ExampleData> repo = List.of(
             new ExampleData("changeme1"),
