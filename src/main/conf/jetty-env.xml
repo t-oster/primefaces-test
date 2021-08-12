@@ -14,4 +14,23 @@
             </New>
         </Arg>
     </New>
+    <Call id="sh" name="getSessionHandler">
+    <Set name="sessionCache">
+      <!-- 
+            use org.eclipse.jetty.server.session.NullSessionCache so the session
+            is restored on every request
+      -->
+      <New class="org.eclipse.jetty.server.session.NullSessionCache">
+        <Arg><Ref id="sh"/></Arg>
+        <Set name="sessionDataStore">
+            <!-- 
+                save session on disk
+            -->
+           <New class="org.eclipse.jetty.server.session.FileSessionDataStore">
+             <Set name="storeDir">/tmp/sessions</Set>
+           </New>
+        </Set>
+      </New>
+    </Set>
+  </Call>
 </Configure>
