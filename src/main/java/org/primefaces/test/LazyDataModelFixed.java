@@ -3,6 +3,9 @@ package org.primefaces.test;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
+import java.util.List;
+import javax.faces.model.DataModelListener;
 import org.primefaces.model.LazyDataModel;
 
 /**
@@ -25,10 +28,25 @@ public abstract class LazyDataModelFixed<T> extends LazyDataModel<T> {
     {
         aInputStream.defaultReadObject();
         setWrappedData(aInputStream.readObject());
+        setRowIndex(aInputStream.readInt());
+        DataModelListener[] l = (DataModelListener[]) aInputStream.readObject();
+        if (l != null) {
+            for (DataModelListener li : l) {
+                addDataModelListener(li);
+            }
+        }
     }
  
     private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
         aOutputStream.defaultWriteObject();
-        aOutputStream.writeObject(this.getWrappedData());
+        List wd = getWrappedData();
+        if (wd != null) {
+            //wrap in LinkedList because implementation may not be serializable
+            wd = new LinkedList<>(wd);
+        }
+        aOutputStream.writeObject(wd);
+        aOutputStream.writeInt(getRowIndex());
+        aOutputStream.writeObject(getDataModelListeners());
     }
+    
 }
